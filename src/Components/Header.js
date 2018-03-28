@@ -1,6 +1,5 @@
 //Vendor
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 //prop-types
 import PropTypes from 'prop-types';
@@ -18,47 +17,44 @@ const styles = {
   },
   flex: {
     flex: 1,
-    fontSize: 24,
-    color: 'white'
+    color: '#000',
+    textAlign: 'center',
+    fontSize: 80
+  },
+  toolBar: {
+    height: 170,
+    backgroundColor: "#FFB81C"
   },
   icon: {
-    paddingLeft: 10,
+    fontSize: 80,
+    color: '#000',paddingLeft: 10,
     paddingRight: 10
-  },
-  link: {
-    color: 'inherit'
-  }, 
-  appBar: {
-    height: 200
   }
 };
 
 /**
- * Rener the LibraryHeader Component
+ * Render the Header Component
  * @param {object} classes passes in JSS styles
  */
-function LibraryHeader(props) {
+function Header(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="title" className={classes.flex}>
-            Welcome to MyReads
+        <Toolbar className={classes.toolBar}>
+          <img src ={require("../images/bridge.png")} alt = "Bridge"/>
+          <Typography variant="display3" className={classes.flex}>
+            Steel City Eats
           </Typography>
-          <Link to="/search" className={classes.link}>
-            <Icon className={classes.icon} aria-label="home">
-              search
-            </Icon>
-          </Link>
+          <Icon className ={classes.icon} >local_dining</Icon>
         </Toolbar>
       </AppBar>
     </div>
   );
 }
 
-LibraryHeader.propTypes = {
+Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(LibraryHeader);
+export default withStyles(styles)(Header);
