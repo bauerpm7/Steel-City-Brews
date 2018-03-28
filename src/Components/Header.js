@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 //material-ui
 import { withStyles } from 'material-ui/styles';
-import { AppBar, Toolbar, Typography, Icon } from 'material-ui';
+import { AppBar, Toolbar, Typography, Icon, Button } from 'material-ui';
 
 /**
  * JSS styles
@@ -63,6 +63,13 @@ const styles = theme => ({
     flexGrow: 1,
     justifyContent: 'center',
     display: 'inline-block'
+  },
+  button: {
+    backgroundColor: 'black',
+    color: "#FFB81C",
+    position: 'fixed',
+    top: 10,
+    left: 10
   }
 });
 
@@ -76,7 +83,7 @@ class Header extends Component {
     return (
       <div className={classes.root}>
         <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar className={classes.toolBar}>
+          <Toolbar className={classes.toolBar}>              
             <div className={classes.imageContainer}>
               <img className={classes.bridge} src ={require("../images/bridge.png")} alt = "Bridge"/>
             </div>
@@ -85,6 +92,9 @@ class Header extends Component {
                 Steel City Eats <Icon className ={classes.icon}>local_dining</Icon>
               </Typography>
             </div>
+            <Button mini = {true} variant='fab' className={classes.button}>
+              <Icon>menu</Icon>
+            </Button>
           </Toolbar>
         </AppBar>
       </div>
