@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { mapStyles } from '../mapStyles.js'
 
 const styles = theme => ({
   map: {
@@ -22,7 +23,8 @@ class PghMap extends Component {
         let mapDiv = document.getElementById("map");
         new window.google.maps.Map(mapDiv, {
             center: { lat: 40.4506, lng: -79.9909  },
-            zoom: 13
+            zoom: 13,
+            styles: mapStyles
         });
     }
 
