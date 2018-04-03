@@ -3,115 +3,126 @@ import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types'
 import { mapStyles } from '../mapStyles'
 import { locations } from '../locations.js'
+import scriptLoader from 'react-async-script-loader';
 
-const styles = theme => ({
-  map: {
-    width: '100%',
-    height: '100vh'
-  }
-})
-let markers = [];
+
 class PghMap extends Component {
+  state = {
+    listOpen: true,
+    map: {},
+    infowindow: {},
+    bounds: {},
+    mapReady: false,
+    // for future use when add location search
+    mapCenter : { lat: 40.346074, lng: -74.067858 },
+    mapError: false,
+    width: window.innerWidth
+  }
 
-    componentDidMount() {
-        window.initMap = this.initMap;
-        loadJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1f9bmydEZICd8rIoZnHaN61AogQzeRE&callback=initMap')
-    }
+  componentDidMount() {
+    window.addEventListener("resize", this.updateWidth);
+  }
 
-    initMap = () => {
-      const map = new window.google.maps.Map(document.getElementById("map"), {
-          center: { lat: 40.4506, lng: -79.9909  },
-          zoom: 12, 
-          styles: mapStyles
+  componentWillReceiveProps({isScriptLoadSucceed}){
+
+    // Check if script is loaded and if map is defined
+    if (isScriptLoadSucceed && !this.state.mapReady ) {
+
+      // create map
+      const map = new window.google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: { lat: 40.4506, lng: -79.9909  },
+        styles: mapStyles
       });
 
-      let largeInfoWindow = new window.google.maps.InfoWindow();
+      // set up bounds and infowindow to use later
+      const bounds = new window.google.maps.LatLngBounds();
+      const infowindow = new window.google.maps.InfoWindow({maxWidth: 300});
 
-      const defaultIcon = this.makeMarkerIcon('FFB81C');
+      this.setState({
+        map: map,
+        infowindow: infowindow,
+        bounds: bounds,
+        mapReady: true,
+      });
 
-      const highlightedIcon = this.makeMarkerIcon('FFFF24');
+    // alert user if map request fails
+    } else if ( !this.state.mapReady ) {
+      console.log("Map did not load");
+      this.setState({mapError: true});
+    }
+  }
 
-      for (let i=0; i<locations.length; i++){
-       
-        var position = locations[i].coordinates;
-        var title = locations[i].title;
-        
-        var marker = new window.google.maps.Marker({
-          position: position,
-          title: title,
-          animation: window.google.maps.Animation.DROP,
-          id: i,
-          icon: defaultIcon
-        });
+  toggleList = () => {
 
-        markers.push(marker);
-        this.showMarkers(map);
+    const { width, listOpen, infowindow } = this.state;
 
-        marker.addListener('click', function (){
-          this.populateInfoWindow(map, this, largeInfoWindow)
-        });
+    if (width < 600) {
+      // close infowindow if listview is opening
+      if (!listOpen) {
+        infowindow.close();
       }
-    }
-
-  populateInfoWindow (map, marker, infowindow) {
-    if (infowindow.marker !== marker) {
-      infowindow.marker = marker;
-
-      // infowindow.setContent('<div>' + marker.title + '</div>');
-      
-      infowindow.addListener('closeclick', function(){
-        infowindow.marker = null;
-      });
-
-      infowindow.open(map, marker);
+      this.setState( { listOpen: !listOpen});
     }
   }
 
-  showMarkers = (map) => {
-    var bounds = new window.google.maps.LatLngBounds();
-    for (let i = 0; i < markers.length; i++) {
-      markers[i].setMap(map);
-      bounds.extend(markers[i].position);
+  updateWidth = () => {
+    const { map, bounds } = this.state;
+    this.setState( { width: window.innerWidth });
+    if (map && bounds) {
+      map.fitBounds(bounds)
     }
-    map.fitBounds(bounds)
   }
 
-  makeMarkerIcon = (markerColor) => {
-      let markerImage = new window.google.maps.MarkerImage(
-        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-        '|40|_|%E2%80%A2',
-        new window.google.maps.Size(21, 34),
-        new window.google.maps.Point(0, 0),
-        new window.google.maps.Point(10, 34),
-        new window.google.maps.Size(21, 34));
-      return markerImage;
-    }
+  render() {
 
+    const { listOpen, map, infowindow, bounds, mapReady, mapCenter, mapError } = this.state;
 
-
-
-    render() {
-      const { classes } = this.props
-        return (
-            <div className={classes.map} id="map"></div>
-        )
-    }
+    return (
+      <div className="container" role="main">
+        <nav id="list-toggle" className="toggle" onClick={this.toggleList}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"></path>
+          </svg>
+        </nav>
+        <section
+          id="restaurant-list"
+          className={ listOpen ? "list open" : "list"}
+          role="complementary"
+          tabIndex={ listOpen ? '0' : '-1' }
+          >
+          <h1 className="app-title">Red Bank Eats</h1>
+          <hr />
+          { /* render markers only when map has loaded */
+            mapReady ?
+            <ListView
+              map={map}
+              infowindow={infowindow}
+              bounds={bounds}
+              mapCenter={mapCenter}
+              toggleList={this.toggleList}
+              listOpen={listOpen}
+            />
+            : <p>We are experiencing loading issues. Please check your internet connection</p>
+          }
+          <img src={foursquare} alt="Powered by Foursquare" className="fs-logo"/>
+        </section>
+        <section id="map" className="map" role="application">
+          { mapError ?
+            <div id="map-error" className="error" role="alert">
+              Google Maps did not load.  Please try again later...
+            </div>
+            : <div className="loading-map">
+                <h4 className="loading-message">Map is loading...</h4>
+                <img src={spinner} className="spinner" alt="loading indicator" />
+             </div>
+        }
+        </section>
+      </div>
+    );
+  }
 }
 
-function loadJS(src) {
-    let ref = window.document.getElementsByTagName("script")[0];
-    let script = window.document.createElement("script");
-    script.src = src;
-    script.async = true;
-    script.onerror = () => {
-        alert('can not load map, refresh it!')
-    }
-    ref.parentNode.insertBefore(script, ref);
-}
-
-PghMap.propTypes = {
-  classes: PropTypes.object.isRequired
-}
-
-export default withStyles(styles)(PghMap);
-
+export default scriptLoader(
+    [`https://maps.googleapis.com/maps/api/js?key=${MAP_KEY}`]
+)(PghMap);
