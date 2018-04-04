@@ -13,59 +13,57 @@ const styles = theme => ({
 let markers = [];
 class PghMap extends Component {
 
-    componentDidMount() {
-        window.initMap = this.initMap;
-        loadJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1f9bmydEZICd8rIoZnHaN61AogQzeRE&callback=initMap')
-    }
-
-    initMap = () => {
-      const map = new window.google.maps.Map(document.getElementById("map"), {
-          center: { lat: 40.4506, lng: -79.9909  },
-          zoom: 12, 
-          styles: mapStyles
-      });
-
-      let largeInfoWindow = new window.google.maps.InfoWindow();
-
-      const defaultIcon = this.makeMarkerIcon('FFB81C');
-
-      const highlightedIcon = this.makeMarkerIcon('FFFF24');
-
-      for (let i=0; i<locations.length; i++){
-       
-        var position = locations[i].coordinates;
-        var title = locations[i].title;
-        
-        var marker = new window.google.maps.Marker({
-          position: position,
-          title: title,
-          animation: window.google.maps.Animation.DROP,
-          id: i,
-          icon: defaultIcon
-        });
-
-        markers.push(marker);
-        this.showMarkers(map);
-
-        marker.addListener('click', function (){
-          this.populateInfoWindow(map, this, largeInfoWindow)
-        });
-      }
-    }
-
-  populateInfoWindow (map, marker, infowindow) {
-    if (infowindow.marker !== marker) {
-      infowindow.marker = marker;
-
-      // infowindow.setContent('<div>' + marker.title + '</div>');
-      
-      infowindow.addListener('closeclick', function(){
-        infowindow.marker = null;
-      });
-
-      infowindow.open(map, marker);
-    }
+  componentDidMount() {
+      window.initMap = this.initMap;
+      loadJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1f9bmydEZICd8rIoZnHaN61AogQzeRE&callback=initMap')
   }
+
+  initMap = () => {
+    const map = new window.google.maps.Map(document.getElementById("map"), {
+        center: { lat: 40.4506, lng: -79.9909  },
+        zoom: 12, 
+        styles: mapStyles
+    });
+
+    let largeInfoWindow = new window.google.maps.InfoWindow();
+
+    const defaultIcon = this.makeMarkerIcon('FFB81C');
+
+    const highlightedIcon = this.makeMarkerIcon('4353B3');
+
+    locations.forEach((location) => {
+     
+      var position = location.coordinates;
+      var title = location.title;
+      
+      var marker = new window.google.maps.Marker({
+        position: position,
+        title: title,
+        animation: window.google.maps.Animation.DROP,
+        icon: defaultIcon
+      });
+      marker.addListener('click', function() {
+        marker.infocontent = `<div class="place">
+                              <p>${marker.title}</p>
+                            </div>`
+        largeInfoWindow.setContent(marker.infocontent)
+        largeInfoWindow.open(map, marker);
+      })
+
+      marker.addListener('mouseover', function() {
+        this.setIcon(highlightedIcon);
+      })
+
+      marker.addListener('mouseout', function() {
+        this.setIcon(defaultIcon);
+      })
+      
+      markers.push(marker);
+      this.showMarkers(map);
+      
+    })
+  }
+
 
   showMarkers = (map) => {
     var bounds = new window.google.maps.LatLngBounds();
@@ -90,12 +88,12 @@ class PghMap extends Component {
 
 
 
-    render() {
-      const { classes } = this.props
-        return (
-            <div className={classes.map} id="map"></div>
-        )
-    }
+  render() {
+    const { classes } = this.props
+      return (
+          <div className={classes.map} id="map"></div>
+      )
+  }
 }
 
 function loadJS(src) {
