@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types'
 import { mapStyles } from '../mapStyles'
-import { getFSLocations, getFSDetails } from '../API/foursquare.js';
+import { getFSDetails } from '../API/foursquare.js';
 import noImage from '../images/no-image-available.png';
 
 
@@ -21,29 +21,16 @@ const styles = theme => ({
 let markers = [];
 
 class PghMap extends Component {
-
-  state = {
-    mapCenter : { lat: 40.4506, lng: -79.9909 },
-    places: [],
-    map: {},
-    bounds: {}
-  }
+  
 
   componentDidMount() {
-
       window.initMap = this.initMap;
       loadJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1f9bmydEZICd8rIoZnHaN61AogQzeRE&callback=initMap');
-      getFSLocations(this.state.mapCenter)
-      .then(places => {
-        this.setState({
-          places: places
-        })
-      })
   }
 
   initMap = () => {
     const map = new window.google.maps.Map(document.getElementById("map"), {
-        center: this.state.mapCenter,
+        center: this.props.mapCenter,
         zoom: 12, 
         styles: mapStyles,
         mapTypeControl: false,
@@ -56,10 +43,8 @@ class PghMap extends Component {
 
     const highlightedIcon = this.makeMarkerIcon('4353B3');
 
-    const bounds = new window.google.maps.LatLngBounds();
-
  
-    this.state.places.forEach((place) => {
+    this.props.places.forEach((place) => {
      
       const position = {
         lat: place.location.lat,
@@ -141,15 +126,16 @@ class PghMap extends Component {
   }
 
 
-
-
   render() {
+    
     const { classes } = this.props
-      return (
-        <section className={classes.gmaps}>
-          <div className={classes.map} id="map"></div>
-        </section>
-      )
+    return (
+      <section className={classes.gmaps}>
+        <div 
+          className={classes.map}
+          id="map" />
+      </section>
+    )
   }
 }
 

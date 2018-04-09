@@ -62,8 +62,13 @@ const styles = theme => ({
  * @param {object} classes passes in JSS styles
  */
 class Header extends Component {
+
+  
+
   render() {
-    const { classes } = this.props;
+
+    const { classes, handleDrawerToggle, drawerOpen } = this.props;
+    console.log(drawerOpen)
     return (
       <div className={classes.root}>
         <AppBar position="fixed" className={classes.appBar}>
@@ -76,7 +81,11 @@ class Header extends Component {
                 Local Pittsburgh Breweries and GastroPubs
               </Typography>
             </div>
-            <Button mini = {true} variant='fab' className={classes.button}>
+            <Button 
+              mini = {true} 
+              variant='fab' 
+              className={classes.button}
+              onClick={() => handleDrawerToggle()}>
               <Icon>menu</Icon>
             </Button>
           </Toolbar>
@@ -89,7 +98,8 @@ class Header extends Component {
 
 
 Header.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  handleDrawerToggle: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Header);
