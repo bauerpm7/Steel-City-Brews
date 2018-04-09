@@ -13,51 +13,35 @@ import { AppBar, Toolbar, Typography, Icon, Button } from 'material-ui';
  */
 const styles = theme => ({
   root: {
-
+    minHeight: 170
   },
   flex: {
     color: '#000',
     textAlign: 'center',
+    fontFamily: 'Bevan',
     fontSize: 80,
     [theme.breakpoints.down('md')]: {
       fontSize: 48
     },
     [theme.breakpoints.down('xs')]: {
-      fontSize: 36
+      fontSize: 24,
+      paddingTop: 20
     }
   },
-  bridge: {
-    paddingTop: 10,
-    paddingBottom: 10,
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+  subtitle: {
+    textAlign: 'center',
     [theme.breakpoints.down('md')]: {
-      width: 350
+      fontSize: 18
     },
     [theme.breakpoints.down('xs')]: {
-      width: 300
-    },
+      fontSize: 18
+    }
   },
   toolBar: {
     minHeight: 170,
     backgroundColor: "#FFB81C",
     display: 'flex',
     flexWrap: 'wrap'
-  },
-  icon: {
-    fontSize: 80,
-    color: '#000',
-    textAlign: 'center',
-    [theme.breakpoints.down('md')]: {
-      fontSize: 48
-    },
-    [theme.breakpoints.down('xs')]: {
-      fontSize: 36
-    }
-  },
-  imageContainer: {
-    flexGrow: 1,
   },
   container: {
     flexGrow: 1,
@@ -78,21 +62,30 @@ const styles = theme => ({
  * @param {object} classes passes in JSS styles
  */
 class Header extends Component {
+
+  
+
   render() {
-    const { classes } = this.props;
+
+    const { classes, handleDrawerToggle, drawerOpen } = this.props;
+    console.log(drawerOpen)
     return (
       <div className={classes.root}>
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar className={classes.toolBar}>              
-            <div className={classes.imageContainer}>
-              <img className={classes.bridge} src ={require("../images/bridge.png")} alt = "Bridge"/>
-            </div>
             <div className={classes.container}>
               <Typography variant="display3" className={classes.flex}>
-                Steel City Eats <Icon className ={classes.icon}>local_dining</Icon>
+                Steel City Brews <span className ="glyphicons glyphicons-beer"></span>
+              </Typography>
+              <Typography variant="title" className={classes.subtitle}>
+                Local Pittsburgh Breweries and GastroPubs
               </Typography>
             </div>
-            <Button mini = {true} variant='fab' className={classes.button}>
+            <Button 
+              mini = {true} 
+              variant='fab' 
+              className={classes.button}
+              onClick={() => handleDrawerToggle()}>
               <Icon>menu</Icon>
             </Button>
           </Toolbar>
@@ -103,8 +96,10 @@ class Header extends Component {
 }
 
 
+
 Header.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  handleDrawerToggle: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Header);
