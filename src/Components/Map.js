@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { mapStyles } from '../mapStyles'
 import { getFSDetails } from '../API/foursquare.js';
 import noImage from '../images/no-image-available.png';
+import MapDrawer from './MapDrawer'
 
 
 const styles = theme => ({
@@ -22,6 +23,10 @@ let markers = [];
 
 class PghMap extends Component {
   
+  state = { 
+    infowindow: {}, 
+    map: {}
+  }
 
   componentDidMount() {
       window.initMap = this.initMap;
@@ -38,6 +43,10 @@ class PghMap extends Component {
     });
 
     let infowindow = new window.google.maps.InfoWindow({maxWidth: 250});
+    this.setState({
+      infowindow: infowindow,
+      map: map
+    })
 
     const defaultIcon = this.makeMarkerIcon('FFB81C');
 
@@ -128,9 +137,16 @@ class PghMap extends Component {
 
   render() {
     
-    const { classes } = this.props
+    const { classes, places, drawerOpen, handleDrawerToggle } = this.props
+    const { infowindow } = this.state
     return (
       <section className={classes.gmaps}>
+        <MapDrawer
+          places = { places }
+          drawerOpen = { drawerOpen }
+          handleDrawerToggle = { handleDrawerToggle }
+          infowindow = { infowindow }
+        />
         <div 
           className={classes.map}
           id="map" />

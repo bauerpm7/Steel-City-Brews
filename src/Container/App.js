@@ -24,6 +24,7 @@ class App extends Component {
       places: [],
       mapCenter : { lat: 40.4506, lng: -79.9909 },
     }
+    this.handleDrawerToggle = this.handleDrawerToggle.bind(this)
   };
 
   componentDidMount() {
@@ -50,14 +51,10 @@ class App extends Component {
           drawerOpen = {drawerOpen}
           handleDrawerToggle = {this.handleDrawerToggle}
         />
-         <MapDrawer 
-          drawerOpen = {drawerOpen}
-          handleDrawerToggle = {this.handleDrawerToggle} 
-          places = { places }
-        />
         <PghMap 
           places = { places }
-          mapCenter = { mapCenter } 
+          drawerOpen = {drawerOpen}
+          handleDrawerToggle = {this.handleDrawerToggle}
         />
         <Footer />
       </div>

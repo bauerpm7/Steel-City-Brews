@@ -1,0 +1,11 @@
+.gmaps{
+    height: 100%,
+  },
+
+.map {
+    margins: auto,
+    width: 100%,
+    height: calc(100% - 230px),
+    overflow: none,
+    position: absolute
+  }
