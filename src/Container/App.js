@@ -8,14 +8,20 @@ import scriptLoader from 'react-async-script-loader';
 import { mapStyles } from '../mapStyles.js';
 import { withStyles } from 'material-ui/styles'
 
+//Components
 import MapDrawer from '../Components/MapDrawer';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 
+// prop-types
 import PropTypes from 'prop-types';
+
+//stylesheet
 import './App.css';
 
-
+/**
+ * JSS styles
+ */
 const styles = {
   
   gmaps:{
@@ -50,7 +56,9 @@ const styles = {
   }
 };
 
-
+/*
+ * Render the App component
+ */
 class App extends Component {
 
   state = {
@@ -64,7 +72,9 @@ class App extends Component {
   
   };
 
-
+  /*
+   * Load google maps if the API succesfully loaded and the map is ready
+   */
   componentWillReceiveProps({isScriptLoadSucceed}){
 
     // Check if script is loaded and if map is ready
@@ -83,6 +93,7 @@ class App extends Component {
       const bounds = new window.google.maps.LatLngBounds();
       const infowindow = new window.google.maps.InfoWindow({maxWidth: 300});
 
+      // set the state of the map and its parameters
       this.setState({
         map: map,
         infowindow: infowindow,
@@ -97,12 +108,24 @@ class App extends Component {
     };
   };
 
+  /**
+   * toggles the drawer open/close
+   */
   handleDrawerToggle = () => {
-    //toggle the state of the drawer
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
 
-
+  /**
+   * renders the App Component
+   * @param {bool} drawerOpen is the drawer open(true) or closed (false)
+   * @param {object} map the map object
+   * @param {object} infowindow the google maps infowindow
+   * @param {object} bounds the google maps bounds parameter
+   * @param {bool} mapReady is the map ready to be rendered
+   * @param {object} mapCenter the latlng of area to center the map on
+   * @param {bool} mapError was the map loaded correctly
+   * @param {object} classes jss styles
+   */
   render() {
 
     const { drawerOpen, map, infowindow, bounds, mapReady, mapCenter, mapError } = this.state;
@@ -128,7 +151,8 @@ class App extends Component {
         }
         <section id="gmaps" className={classes.gmap} >
           <div id='map' className={classes.map} role="application" />
-          { mapError ?
+          { /* Render this if there was an error loading the map */
+          mapError ?
             <div className={ classes.mapError } role="alert">
               Google Maps did not load.  Please try again later...
             </div>
