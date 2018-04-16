@@ -1,5 +1,5 @@
-# Steel City Brewhaha
----
+# Steel City Brews
+
 
 ## Project Purpose:
 
@@ -38,6 +38,7 @@ npm start
 * [Foursquare API - Venue Search](https://developer.foursquare.com/docs/api/venues/search)
 * [Foursquare API - Venue Details](https://developer.foursquare.com/docs/api/venues/details)
 * [Map styling](https://developers.google.com/maps/documentation/javascript/styling)
+
 
 ### Udacity Resources:
 * [Udacity Neighborhood Map Project Rubric](https://review.udacity.com/#!/rubrics/1351/view)
