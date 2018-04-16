@@ -1,4 +1,4 @@
-# Steel City Brews
+# Steel City Brewhaha
 ---
 
 ## Project Purpose:
