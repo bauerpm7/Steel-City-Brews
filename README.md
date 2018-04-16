@@ -10,7 +10,7 @@ The map is generated using the Google Maps API.  The list of breweries/gastropub
 
 ## Demo
 
-Visit the live demo site at https://steel-city-brews-bauerpm7.herokuapp.com/
+Visit the live demo site at https://steel-city-brews.herokuapp.com/
 
 
 ## Installing
