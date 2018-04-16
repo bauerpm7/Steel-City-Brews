@@ -155,7 +155,8 @@ class MapDrawer extends Component {
                                   <span>Read more on </span>
                                   <img class="fsIcon" src="${fsButton}">
                                   <span>Foursquare</span>
-                                </a>`
+                                </a>
+                                `
 
           // set content and open window after content has returned
           infowindow.setContent(marker.infoContent);
