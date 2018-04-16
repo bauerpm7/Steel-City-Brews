@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import PropTypes from 'prop-types'
 import { mapStyles } from '../mapStyles'
-import { getFSDetails } from '../API/foursquare.js';
+import { getFSLocations, getFSDetails } from '../API/foursquare.js';
 import noImage from '../images/no-image-available.png';
 import MapDrawer from './MapDrawer'
 
@@ -25,13 +25,24 @@ class PghMap extends Component {
   
   state = { 
     infowindow: {}, 
-    map: {}
+    map: {},
+    places: []
   }
 
   componentDidMount() {
       window.initMap = this.initMap;
       loadJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyCy1f9bmydEZICd8rIoZnHaN61AogQzeRE&callback=initMap');
+      getFSLocations(this.props.mapCenter)
+      .then(places => {
+        this.setState({
+          places: places
+      })
+        
+      this.addMarkers(this.state.infowindow, places, this.state.map)
+
+    })
   }
+
 
   initMap = () => {
     const map = new window.google.maps.Map(document.getElementById("map"), {
@@ -42,33 +53,43 @@ class PghMap extends Component {
         fullscreenControl: false
     });
 
+    const bounds = new window.google.maps.LatLngBounds();
     let infowindow = new window.google.maps.InfoWindow({maxWidth: 250});
+    
     this.setState({
       infowindow: infowindow,
-      map: map
+      map: map,
+      bounds: bounds
     })
 
-    const defaultIcon = this.makeMarkerIcon('FFB81C');
 
-    const highlightedIcon = this.makeMarkerIcon('4353B3');
+  }
 
+
+  addMarkers = ( places, map, infowindow )=> {
  
-    this.props.places.forEach((place) => {
+    this.state.places.forEach((place) => {
      
       const position = {
         lat: place.location.lat,
         lng: place.location.lng
       }
 
-      
-      let marker = new window.google.maps.Marker({
-        position: position,
+      // const defaultIcon = this.makeMarkerIcon('FFB81C');
+
+      // const highlightedIcon = this.makeMarkerIcon('4353B3');
+
+      place.marker = new window.google.maps.Marker({
+        position,
+        map,
         title: place.name,
         animation: window.google.maps.Animation.DROP,
-        icon: defaultIcon,
+        // icon: defaultIcon,
         id: place.id
       });
-      marker.addListener('click', function() {
+      place.marker.addListener('click', function() {
+
+        const marker = this;
 
         getFSDetails(marker.id)
         .then(data => {
@@ -98,15 +119,15 @@ class PghMap extends Component {
         
       })
 
-      marker.addListener('mouseover', function() {
-        this.setIcon(highlightedIcon);
-      })
+      // place.marker.addListener('mouseover', function() {
+      //   this.setIcon(highlightedIcon);
+      // })
 
-      marker.addListener('mouseout', function() {
-        this.setIcon(defaultIcon);
-      })
+      // place.marker.addListener('mouseout', function() {
+      //   this.setIcon(defaultIcon);
+      // })
       
-      markers.push(marker);
+      markers.push(place.marker);
       this.showMarkers(map);
       // this.getLocations(location.title);
     });
@@ -123,22 +144,22 @@ class PghMap extends Component {
     map.fitBounds(bounds)
   }
 
-  makeMarkerIcon = (markerColor) => {
-      let markerImage = new window.google.maps.MarkerImage(
-        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-        '|40|_|%E2%80%A2',
-        new window.google.maps.Size(21, 34),
-        new window.google.maps.Point(0, 0),
-        new window.google.maps.Point(10, 34),
-        new window.google.maps.Size(21, 34));
-      return markerImage;
-  }
+  // makeMarkerIcon = (markerColor) => {
+  //     let markerImage = new window.google.maps.MarkerImage(
+  //       'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+  //       '|40|_|%E2%80%A2',
+  //       new window.google.maps.Size(21, 34),
+  //       new window.google.maps.Point(0, 0),
+  //       new window.google.maps.Point(10, 34),
+  //       new window.google.maps.Size(21, 34));
+  //     return markerImage;
+  // }
 
 
   render() {
     
-    const { classes, places, drawerOpen, handleDrawerToggle } = this.props
-    const { infowindow } = this.state
+    const { classes, drawerOpen, handleDrawerToggle } = this.props
+    const { infowindow, places } = this.state
     return (
       <section className={classes.gmaps}>
         <MapDrawer
