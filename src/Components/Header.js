@@ -86,7 +86,7 @@ class Header extends Component {
               variant='fab' 
               className={classes.button}
               onClick={() => handleDrawerToggle()}>
-              <Icon>menu</Icon>
+              <Icon>filter_list</Icon>
             </Button>
           </Toolbar>
         </AppBar>

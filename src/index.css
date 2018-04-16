@@ -1,20 +1,6 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-}
-
-/* infowindow*/
-
-.infowindow {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.name,
-.address,
-.phone,
-.restaurant_url {
-  margin-left: 10px;
+  font-family: Roboto;
 }
 

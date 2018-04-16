@@ -5,7 +5,41 @@ import noImage from '../images/no-image-available.png';
 import fsButton from '../images/foursquare-button.png';
 import beerIcon from '../images/beer_marker.svg';
 import PropTypes from 'prop-types';
-import { Drawer } from 'material-ui'
+import { Drawer, List } from 'material-ui'
+import { withStyles } from 'material-ui/styles'
+
+
+
+const style = {
+  listView: {
+    maxWidth: 280,
+  },
+  breweryList: {
+    overflow: 'auto',
+    paddingLeft: 20,
+    paddingRight: 20
+  }, 
+  query: {
+    fontSize: 18,
+    marginLeft: 20,
+    marginTop: 15,
+    marginBottom: 5,
+    width: 225,
+    border: '2px solid #8e8e8e',
+    borderRadius: ' 5px 5px',
+    padding: 5
+  }, 
+  loadingFS: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  loadingFSMessage: {
+    fontStyle: 'italic'
+  }
+}
 
 class MapDrawer extends Component {
 
@@ -80,19 +114,20 @@ class MapDrawer extends Component {
 
           // build infowindonw content
           marker.infoContent = `<div class="place">
-                                  <img class="place-photo" src=${marker.photo} alt="${marker.title}">
-                                  <div class="place-meta">
-                                    <h2 class="place-title">${marker.title}</h2>
-                                    <p class="place-data">${marker.category}</p>
-                                    <p class="place-price">${marker.price}</p>
-                                    <p class="place-contact">${marker.address}</p>
-                                    <a class="place-phone" href="tel:${marker.phone}">${marker.phone}</a>
+                                  <img class="placePhoto" src=${marker.photo} alt="${marker.title}">
+                                  <div class="placeMeta">
+                                    <h2 class="placeTitle">${marker.title}</h2>
+                                    <p class="placeData">${marker.category}</p>
+                                    <p class="placePrice">${marker.price}</p>
+                                    <p class="placeContact">${marker.address}</p>
+                                    <a class="placePhone" href="tel:${marker.phone}">${marker.phone}</a>
                                   </div>
                                 </div>
-                                <p class="place-tip">${marker.tip}</p>
-                                <a class="place-link" href="${marker.url}" target="_blank">
-                                  <span>Read more</span>
-                                  <img class="fs-link" src="${fsButton}">
+                                <p class="placeTip">${marker.tip}</p>
+                                <a class="placeLink" href="${marker.url}" target="_blank">
+                                  <span>Read more on </span>
+                                  <img class="fsIcon" src="${fsButton}">
+                                  <span>Foursquare</span>
                                 </a>`
 
           // set content and open window after content has returned
@@ -105,7 +140,7 @@ class MapDrawer extends Component {
           };
         })
         .catch(error =>  {
-          marker.infoContent = `<div class="venue-error"  role="alert">
+          marker.infoContent = `<div class="venueError"  role="alert">
                   <h3>Foursquare Venue Details request for ${marker.title} failed</h3>
                   <p>Try again later...</p>
                 </div>`
@@ -158,7 +193,7 @@ class MapDrawer extends Component {
   render() {
 
     const { apiReturned, filteredPlaces, query } = this.state;
-    const { drawerOpen, handleDrawerToggle } = this.props;
+    const { drawerOpen, handleDrawerToggle, classes } = this.props;
 
     // API request fails
     if(apiReturned && !filteredPlaces) {
@@ -171,17 +206,17 @@ class MapDrawer extends Component {
             open={ drawerOpen }
             onClose={ handleDrawerToggle }
           >
-          <div className="list-view">
+          <div className={classes.listView}>
             <input type="text"
               placeholder="filter by name"
               value={ query }
               onChange={ this.filterPlaces }
-              className="query"
+              className={ classes.query }
               role="search"
               aria-labelledby="text filter"
             />
             { apiReturned && filteredPlaces.length > 0 ?
-            <ul className="places-list">
+            <List className={classes.breweryList}>
               {filteredPlaces.map((place, id) =>
                 <Place
                   key={place.id}
@@ -190,8 +225,8 @@ class MapDrawer extends Component {
                   handleDrawerToggle={handleDrawerToggle}
                 />
               )}
-            </ul>
-            : <p id="filter-error" className="empty-input">No places match filter</p>
+            </List>
+            : <p className={classes.noMatches}>No places match filter</p>
             }
           </div>
         </Drawer>
@@ -200,8 +235,8 @@ class MapDrawer extends Component {
     // API request has not returned yet
     } else {
       return (
-        <div className="loading-fs">
-          <h4 className="loading-message">Loading Restaurants...</h4>
+        <div className={classes.loadingFS}>
+          <h4 className={classes.loadingMessage}>Loading Breweries and GastroPubs...</h4>
        </div>
      )
     }
@@ -218,4 +253,4 @@ MapDrawer.propTypes = {
   drawerOpen: PropTypes.bool.isRequired
 }
 
-export default MapDrawer;
+export default withStyles(style) (MapDrawer);

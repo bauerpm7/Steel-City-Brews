@@ -7,8 +7,7 @@ import PropTypes from 'prop-types';
 //material-ui
 import { withStyles } from 'material-ui/styles';
 
-
-//react logo
+//Foursquare logo
 import logo from '../images/Powered-by-Foursquare-black-300.png';
 
 /**
@@ -25,25 +24,14 @@ const styles = {
     height: 60,
     marginTop: 100
   },
-  flex: {
-    color: 'white',
-    paddingTop: 10,
-    paddingBottom: 10,
-    fontSize: 14,
-    height: 60,
-  },
   logo: {
     paddingTop: 10,
     width: 300
   },
-  link: {
-    color: 'white',
-    paddingLeft: 10
-  }
 };
 
 /**
- * Render the Footer component same for all pages
+ * Render the Footer component
  */
 function Footer(props) {
   const { classes } = props;

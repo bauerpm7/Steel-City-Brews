@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import scriptLoader from 'react-async-script-loader';
 import { mapStyles } from '../mapStyles.js';
 import MapDrawer from '../Components/MapDrawer';
-import foursquare from '../images/foursquare.png';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import { withStyles } from 'material-ui/styles'
+import PropTypes from 'prop-types';
 import './App.css';
 
 
-const styles = theme => ({
+const styles = {
   
   gmaps:{
     height: '100%',
@@ -25,8 +25,23 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'auto'
+  },
+  mapError: {
+    fontStyle: 'italic',
+    paddingTop: 400,
+    textAlign: 'center'
+  },
+  mapLoading: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  mapLoadingMessage: {
+    fontStyle: 'italic',
   }
-})
+};
 
 
 class App extends Component {
@@ -37,11 +52,10 @@ class App extends Component {
     infowindow: {},
     bounds: {},
     mapReady: false,
-    // for future use when add location search
     mapCenter : { lat: 40.4506, lng: -79.9909 },
     mapError: false,
   
-  }
+  };
 
 
   componentWillReceiveProps({isScriptLoadSucceed}){
@@ -53,7 +67,9 @@ class App extends Component {
       const map = new window.google.maps.Map(document.getElementById('map'), {
         zoom: 12,
         center: this.state.mapCenter,
-        styles: mapStyles
+        styles: mapStyles,
+        fullscreenControl: false,
+        mapTypeControl: false
       });
 
       // set up bounds and infowindow to use later
@@ -71,8 +87,8 @@ class App extends Component {
     } else if ( !this.state.mapReady ) {
       console.log("Map did not load");
       this.setState({mapError: true});
-    }
-  }
+    };
+  };
 
   handleDrawerToggle = () => {
     //toggle the state of the drawer
@@ -101,23 +117,27 @@ class App extends Component {
             handleDrawerToggle={this.handleDrawerToggle}
             drawerOpen={drawerOpen}
           />
-          : <p>We are experiencing loading issues. Please check your internet connection</p>
+          : <p>Foursquare is experiencing issues loading data. Please check your internet connection...</p>
         }
-        <section id="gmaps" className="gmaps" >
+        <section id="gmaps" className={classes.gmap} >
           <div id='map' className={classes.map} role="application" />
           { mapError ?
-            <div id="map-error" className="error" role="alert">
+            <div className={ classes.mapError } role="alert">
               Google Maps did not load.  Please try again later...
             </div>
-            : <div className="loading-map">
-                <h4 className="loading-message">Map is loading...</h4>
+            : <div className={classes.mapLoading}>
+                <h4 className={classes.mapLoadingMessage}>Map is loading...</h4>
              </div>
         }
         </section>
         <Footer />
       </div>
     );
-  }
+  };
+};
+
+App.propTypes = {
+  classes: PropTypes.object.isRequired
 }
 
 export default withStyles(styles) (scriptLoader(
