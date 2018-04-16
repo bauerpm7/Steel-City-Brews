@@ -1,13 +1,27 @@
+// vendor
 import React, { Component } from 'react';
+
+//componenets
 import Place from './Place';
+
+//API functions
 import { getFSLocations, getFSDetails } from '../API/foursquare';
+
+//images
 import noImage from '../images/no-image-available.png';
 import fsButton from '../images/foursquare-button.png';
 import beerIcon from '../images/beer_marker.svg';
+
+//prop-types
 import PropTypes from 'prop-types';
+
+//material-ui-next
 import { Drawer, List } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 
+/**
+ * JSS Styles
+ */
 const style = {
   listView: {
     maxWidth: 280,
@@ -41,6 +55,9 @@ const style = {
   }
 }
 
+/**
+ * MapDrawer Component
+ */
 class MapDrawer extends Component {
 
 
@@ -51,6 +68,10 @@ class MapDrawer extends Component {
     apiReturned: false
   }
 
+  /**
+   * Gets locations from the Foursquare API
+   * @return {array} locations to be added to the map
+   */
   componentDidMount () {
     getFSLocations(this.props.mapCenter)
     .then( places => {
@@ -64,6 +85,10 @@ class MapDrawer extends Component {
     .catch(error => this.setState({apiReturned: true}));
   }
 
+  /**
+   * add markers to the map and populate the infowindow
+   * @param {array} places places to be shown on the map
+   */
   addMarkers (places) {
     const { map, bounds, infowindow, toggleList } = this.props;
     const self = this;
@@ -85,10 +110,12 @@ class MapDrawer extends Component {
 
       bounds.extend(position);
 
+      /**
+       * when a marker is clicked open the infowindow and display information 
+       * from the Foursquare API
+       */
       location.marker.addListener('click', function() {
         const marker = this;
-
-        // bounce marker three times then stop
         marker.setAnimation(window.google.maps.Animation.BOUNCE);
         setTimeout(function() {
           marker.setAnimation(null);
@@ -160,6 +187,11 @@ class MapDrawer extends Component {
     map.fitBounds(bounds);
   }
 
+  /**
+   * filters the places basec on the input field
+   * @param  {onChange} event filter the locations as the user 
+   * @return {array} filteredPlaces a new array of filtered places
+   */
   filterPlaces = (event) => {
 
     const { allPlaces } = this.state;
@@ -182,6 +214,9 @@ class MapDrawer extends Component {
     this.setState({filteredPlaces: filteredPlaces })
   }
 
+  /**
+   * Renders the MapDrawer
+   */
   render() {
 
     const { apiReturned, filteredPlaces, query } = this.state;
