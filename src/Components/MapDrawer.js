@@ -8,16 +8,12 @@ import PropTypes from 'prop-types';
 import { Drawer, List } from 'material-ui'
 import { withStyles } from 'material-ui/styles'
 
-
-
 const style = {
   listView: {
     maxWidth: 280,
   },
   breweryList: {
     overflow: 'auto',
-    paddingLeft: 20,
-    paddingRight: 20
   }, 
   query: {
     fontSize: 18,
@@ -26,8 +22,8 @@ const style = {
     marginBottom: 5,
     width: 225,
     border: '2px solid #8e8e8e',
-    borderRadius: ' 5px 5px',
-    padding: 5
+    borderRadius: '5px 5px',
+    padding: 5,
   }, 
   loadingFS: {
     display: 'flex',
@@ -38,6 +34,10 @@ const style = {
   },
   loadingFSMessage: {
     fontStyle: 'italic'
+  },
+  noMatches: {
+    marginLeft: 20,
+    marginTop: 15
   }
 }
 
@@ -178,16 +178,8 @@ class MapDrawer extends Component {
       place.marker.setVisible(match);
       return match;
     })
-
-    // sort array before updating state
-    filteredPlaces.sort(this.sortName);
-
+   
     this.setState({filteredPlaces: filteredPlaces })
-  }
-
-  showInfo = (place) => {
-    // force marker click
-    window.google.maps.event.trigger(place.marker,'click');
   }
 
   render() {
@@ -208,6 +200,7 @@ class MapDrawer extends Component {
           >
           <div className={classes.listView}>
             <input type="text"
+              autoFocus
               placeholder="filter by name"
               value={ query }
               onChange={ this.filterPlaces }
@@ -216,7 +209,9 @@ class MapDrawer extends Component {
               aria-labelledby="text filter"
             />
             { apiReturned && filteredPlaces.length > 0 ?
-            <List className={classes.breweryList}>
+            <List 
+              className={classes.breweryList}
+            >
               {filteredPlaces.map((place, id) =>
                 <Place
                   key={place.id}
@@ -226,7 +221,7 @@ class MapDrawer extends Component {
                 />
               )}
             </List>
-            : <p className={classes.noMatches}>No places match filter</p>
+            : <p className={classes.noMatches}>No matches found...</p>
             }
           </div>
         </Drawer>

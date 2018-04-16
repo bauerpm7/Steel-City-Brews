@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ListItem, ListItemText } from 'material-ui'
+import { withStyles } from 'material-ui/styles'
+
+const styles = {
+  listItem: {
+    '& :hover': { 
+      color: '#FFB81C'
+    }
+  }
+}
 
 class Place extends Component {
-
-  static propTypes = {
-    place: PropTypes.object.isRequired,
-    drawerOpen: PropTypes.bool.isRequired,
-    handleDrawerToggle: PropTypes.func.isRequired
-  }
 
   showInfo = () => {
     // force marker click
@@ -16,10 +20,12 @@ class Place extends Component {
 
   render() {
 
-    const { place, drawerOpen, handleDrawerToggle } = this.props;
+    const { place, drawerOpen, handleDrawerToggle , classes} = this.props;
 
     return (
-      <li className="place">
+      <ListItem 
+        className={classes.place}
+      >
         <div
           onClick={() => {
             handleDrawerToggle();
@@ -32,11 +38,20 @@ class Place extends Component {
           role="button"
           tabIndex={ drawerOpen ? '0' : '-1' }
           >
-          {place.name}
+          <ListItemText 
+            className = {classes.listItem}
+            primary = {place.name}/>
         </div>
-      </li>
+      </ListItem>
     );
   }
 }
 
-export default Place;
+Place.propTypes = {
+    classes: PropTypes.object.isRequired,
+    place: PropTypes.object.isRequired,
+    drawerOpen: PropTypes.bool.isRequired,
+    handleDrawerToggle: PropTypes.func.isRequired
+  }
+
+export default withStyles(styles) (Place);

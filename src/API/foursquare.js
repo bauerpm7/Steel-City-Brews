@@ -1,7 +1,7 @@
 const CLIENT_ID = 'CSADRTTTBAFPQWAD2DRARHFFTFWP3BZQTBWGI41WXQUPZ5YB';
 const CLIENT_SECRET = 'MTQPPNWAJQVWGNXTDXAG2EOQQPFQ52J5MQ4ARU4ULBBD5RJO';
 
-const sortName = (a, b) => {
+export const sortName = (a, b) => {
   // remove case senstivity
   const nameA = a.name.toUpperCase();
   const nameB = b.name.toUpperCase();

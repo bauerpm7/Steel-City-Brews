@@ -1,10 +1,17 @@
+//vendor
 import React, { Component } from 'react';
+
+//react-async-script-loader
 import scriptLoader from 'react-async-script-loader';
+
+//material-ui-next
 import { mapStyles } from '../mapStyles.js';
+import { withStyles } from 'material-ui/styles'
+
 import MapDrawer from '../Components/MapDrawer';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
-import { withStyles } from 'material-ui/styles'
+
 import PropTypes from 'prop-types';
 import './App.css';
 

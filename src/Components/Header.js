@@ -82,6 +82,8 @@ class Header extends Component {
               </Typography>
             </div>
             <Button 
+              role = 'button'
+              aria-label = 'Filter Breweries'
               mini = {true} 
               variant='fab' 
               className={classes.button}
