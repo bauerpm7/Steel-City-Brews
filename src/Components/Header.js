@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 //material-ui
 import { withStyles } from 'material-ui/styles';
-import { AppBar, Toolbar, Typography, Icon, Button, Tooltip } from 'material-ui';
+import { AppBar, Toolbar, Typography, Icon, Button } from 'material-ui';
 
 
 /**
@@ -53,8 +53,8 @@ const styles = theme => ({
     backgroundColor: 'black',
     color: "#FFB81C",
     position: 'fixed',
-    top: 15,
-    left: 15
+    top: 10,
+    left: 10
   }
 });
 
@@ -82,20 +82,15 @@ class Header extends Component {
                 Local Pittsburgh Breweries and GastroPubs
               </Typography>
             </div>
-            <Tooltip 
-              title="Filter"
-              placement = 'bottom'
-            >
-              <Button 
-                role = 'button'
-                aria-label = 'Filter Breweries'
-                mini = {true} 
-                variant='fab' 
-                className={classes.button}
-                onClick={() => handleDrawerToggle()}>
-                <Icon>filter_list</Icon>
-              </Button>
-            </Tooltip>
+           <Button 
+              role = 'button'
+              aria-label = 'Filter Breweries'
+              mini = {true} 
+              variant='fab' 
+              className={classes.button}
+              onClick={() => handleDrawerToggle()}>
+              <Icon>filter_list</Icon>
+            </Button>
           </Toolbar>
         </AppBar>
       </div>
