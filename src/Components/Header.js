@@ -82,7 +82,10 @@ class Header extends Component {
                 Local Pittsburgh Breweries and GastroPubs
               </Typography>
             </div>
-            <Tooltip title="Filter">
+            <Tooltip 
+              title="Filter"
+              placement = 'bottom'
+            >
               <Button 
                 role = 'button'
                 aria-label = 'Filter Breweries'
