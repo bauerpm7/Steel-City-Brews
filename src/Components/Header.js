@@ -53,8 +53,8 @@ const styles = theme => ({
     backgroundColor: 'black',
     color: "#FFB81C",
     position: 'fixed',
-    top: 10,
-    left: 10
+    top: 15,
+    left: 15
   }
 });
 
