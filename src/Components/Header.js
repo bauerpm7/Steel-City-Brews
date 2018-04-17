@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 
 //material-ui
 import { withStyles } from 'material-ui/styles';
-import { AppBar, Toolbar, Typography, Icon, Button } from 'material-ui';
+import { AppBar, Toolbar, Typography, Icon, Button, Tooltip } from 'material-ui';
+
 
 /**
  * JSS styles
@@ -81,15 +82,17 @@ class Header extends Component {
                 Local Pittsburgh Breweries and GastroPubs
               </Typography>
             </div>
-            <Button 
-              role = 'button'
-              aria-label = 'Filter Breweries'
-              mini = {true} 
-              variant='fab' 
-              className={classes.button}
-              onClick={() => handleDrawerToggle()}>
-              <Icon>filter_list</Icon>
-            </Button>
+            <Tooltip title="Filter">
+              <Button 
+                role = 'button'
+                aria-label = 'Filter Breweries'
+                mini = {true} 
+                variant='fab' 
+                className={classes.button}
+                onClick={() => handleDrawerToggle()}>
+                <Icon>filter_list</Icon>
+              </Button>
+            </Tooltip>
           </Toolbar>
         </AppBar>
       </div>
